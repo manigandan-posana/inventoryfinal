@@ -113,23 +113,25 @@ export default function TransferPage() {
     dispatch(clearTransferSelections());
   }, [dispatch, fromProject]);
 
-  const transferProjects = useMemo(() => {
+  const fromProjects = useMemo(() => {
     if (assignedProjects?.length) return assignedProjects;
     return projects || [];
   }, [assignedProjects, projects]);
 
-  useEffect(() => {
-    if (!fromProject && transferProjects.length > 0) {
-      dispatch(setTransferField({ field: "fromProject", value: String(transferProjects[0].id) }));
-    }
-  }, [dispatch, fromProject, transferProjects]);
+  const toProjects = useMemo(() => projects || fromProjects, [fromProjects, projects]);
 
   useEffect(() => {
-    if (fromProject && !toProject && transferProjects.length > 0) {
-      const fallback = transferProjects.find((p) => String(p.id) !== String(fromProject)) || transferProjects[0];
+    if (!fromProject && fromProjects.length > 0) {
+      dispatch(setTransferField({ field: "fromProject", value: String(fromProjects[0].id) }));
+    }
+  }, [dispatch, fromProject, fromProjects]);
+
+  useEffect(() => {
+    if (fromProject && !toProject && toProjects.length > 0) {
+      const fallback = toProjects.find((p) => String(p.id) !== String(fromProject)) || toProjects[0];
       dispatch(setTransferField({ field: "toProject", value: String(fallback.id) }));
     }
-  }, [dispatch, fromProject, toProject, transferProjects]);
+  }, [dispatch, fromProject, toProject, toProjects]);
 
   const openModalForLine = (line) => {
     const materialKey = String(line.materialId);
@@ -243,7 +245,7 @@ export default function TransferPage() {
               required
             >
               <option value="">Select project</option>
-              {transferProjects.map((project) => (
+              {fromProjects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.code} — {project.name}
                 </option>
@@ -269,7 +271,7 @@ export default function TransferPage() {
               required
             >
               <option value="">Select project</option>
-              {transferProjects.map((project) => (
+              {toProjects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.code} — {project.name}
                 </option>
