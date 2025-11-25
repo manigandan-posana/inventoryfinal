@@ -269,6 +269,7 @@ function MultiAllocationPanel({ projectId, materials, allocatedMaterialIds, onSa
                       onChange={(e) =>
                         pagination.currentItems.forEach((m) => toggleSelected(m, e.target.checked))
                       }
+                      onClick={(event) => event.stopPropagation()}
                     />
                   </th>
                   <th className="border border-slate-200 px-2 py-1 text-left">Code</th>
@@ -278,7 +279,6 @@ function MultiAllocationPanel({ projectId, materials, allocatedMaterialIds, onSa
                   <th className="border border-slate-200 px-2 py-1 text-left">UOM</th>
                   <th className="border border-slate-200 px-2 py-1 text-left">Category</th>
                   <th className="border border-slate-200 px-2 py-1 text-right">Required qty</th>
-                  <th className="border border-slate-200 px-2 py-1 text-center">Set</th>
                 </tr>
               </thead>
               <tbody>
@@ -288,13 +288,15 @@ function MultiAllocationPanel({ projectId, materials, allocatedMaterialIds, onSa
                   return (
                     <tr
                       key={key}
-                      className={`transition hover:bg-slate-50 ${existing ? "bg-emerald-50" : ""}`}
+                      className={`cursor-pointer transition hover:bg-slate-50 ${existing ? "bg-emerald-50" : ""}`}
+                      onClick={() => openModalForMaterial(material)}
                     >
                       <td className="border border-slate-200 px-2 py-1 text-center">
                         <input
                           type="checkbox"
                           checked={Boolean(existing)}
                           onChange={(e) => toggleSelected(material, e.target.checked)}
+                          onClick={(event) => event.stopPropagation()}
                         />
                       </td>
                       <td className="border border-slate-200 px-2 py-1 font-mono">
@@ -312,35 +314,15 @@ function MultiAllocationPanel({ projectId, materials, allocatedMaterialIds, onSa
                       <td className="border border-slate-200 px-2 py-1 text-right">
                         {existing ? Number(existing.quantity || 0).toLocaleString() : "—"}
                       </td>
-                      <td className="border border-slate-200 px-2 py-1 text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value={existing ? existing.quantity : ""}
-                            onFocus={() => toggleSelected(material, true)}
-                            onChange={(e) => updateSelectedQuantity(material.id, Number(e.target.value))}
-                            className="w-24 rounded border border-slate-200 px-2 py-[3px] text-right"
-                          />
-                          <button
-                            type="button"
-                            className="text-[10px] font-semibold text-sky-700"
-                            onClick={() => openModalForMaterial(material)}
-                          >
-                            Set
-                          </button>
-                        </div>
-                      </td>
                     </tr>
                   );
                 })}
                 {pagination.currentItems.length === 0 && (
                   <tr>
-                    <td
-                      className="border border-slate-200 px-2 py-3 text-center text-slate-500"
-                      colSpan={9}
-                    >
+                      <td
+                        className="border border-slate-200 px-2 py-3 text-center text-slate-500"
+                        colSpan={8}
+                      >
                       All materials are already allocated for this project, or nothing matches your
                       filters.
                     </td>
@@ -563,6 +545,8 @@ export default function ProjectAllocationManager({
     }
   }, [dataVersion, refreshBom, selectedProjectId]);
 
+  const allocations = selectedProjectId ? bomByProject[selectedProjectId] || [] : [];
+
   const materialsMap = useMemo(() => {
     const map = new Map();
     materials.forEach((material) => {
@@ -592,7 +576,6 @@ export default function ProjectAllocationManager({
     };
   }, [materials]);
 
-  const allocations = selectedProjectId ? bomByProject[selectedProjectId] || [] : [];
   const loading = bomStatusByProject[selectedProjectId] === "loading";
   const allocationError = error;
 
