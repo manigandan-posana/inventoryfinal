@@ -1,0 +1,96 @@
+/* Compact, professional table styles shared across workspace pages */
+.table-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+  padding: 8px;
+}
+
+.compact-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 11px;
+  color: #202124;
+}
+
+.compact-table thead th {
+  background: #f8f9fb;
+  color: #202124;
+  font-weight: 600;
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.compact-table tbody td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  color: #111827;
+}
+
+.compact-table tbody tr:nth-child(even) {
+  background: #f4f6fb;
+}
+
+.compact-table tbody tr:hover {
+  background: #e8f0fe;
+}
+
+.compact-table .cell-number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  color: #202124;
+}
+
+.data-table thead th {
+  background: #f8f9fb;
+  color: #5f6368;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 6px 10px;
+  text-align: left;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: #f6f8fb;
+}
+
+.data-table tbody tr:hover {
+  background: #e8f0fe;
+}
+
+.data-table .cell-tight {
+  white-space: nowrap;
+}
+
+.data-table .cell-right {
+  text-align: right;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #111827;
+  font-size: 11px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border);
+}
